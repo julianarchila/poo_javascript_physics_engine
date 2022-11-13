@@ -1,6 +1,6 @@
 class Engine {
     constructor() {
-        const ctx =  // todo 
+        const display = new Path2D(); // todo 
     }   
     
 
@@ -8,3 +8,6 @@ class Engine {
 
 
 }
+    
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
