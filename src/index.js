@@ -1,17 +1,26 @@
-import { AABB, Box2d, Circle, Line } from "./primitives/index.js";
+import { AABB, regularPolygon, Circle, Line } from "./primitives/index.js";
 class Engine {
   constructor() {
-    const display = new Path2D(); // todo
+    const canvas = document.createElement("canvas");
+    canvas.id = ("render");
+    canvas.width = 500;
+    canvas.height = 500;
+    document.body.appendChild(canvas);
+    const render = document.getElementById("render");
+    this.ctx = render.getContext('2d'); 
   }
-
   primitives = {
     AABB,
-    Box2d,
+    regularPolygon,
     Circle,
     Line,
   };
 }
 
-let c = new Engine();
-
-console.log(c);
+let engine = new Engine();
+let rectangle = new engine.primitives.regularPolygon(6,100,100,100,"hexagon", engine.ctx);
+function draw(){
+  rectangle.display();
+}
+setInterval(draw,100)
+console.log(engine.ctx);

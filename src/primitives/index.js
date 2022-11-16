@@ -1,6 +1,6 @@
 import Circle from "./Circle.js";
 import Line from "./Line.js";
 import AABB from "./AABB.js";
-import Box2d from "./Box2d.js";
+import regularPolygon from "./regularPolygon.js";
 
-export { Circle, Line, AABB, Box2d };
+export { Circle, Line, AABB, regularPolygon };
