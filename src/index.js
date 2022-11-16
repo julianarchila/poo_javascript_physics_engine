@@ -1,4 +1,4 @@
-import { AABB, Box2d, Circle, Line } from "./primitives";
+import { AABB, Box2d, Circle, Line } from "./primitives/index.js";
 class Engine {
   constructor() {
     const display = new Path2D(); // todo
@@ -12,5 +12,6 @@ class Engine {
   };
 }
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+let c = new Engine();
+
+console.log(c);
