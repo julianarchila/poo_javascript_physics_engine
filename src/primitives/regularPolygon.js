@@ -21,6 +21,8 @@ class regularPolygon {
     }
     this.ctx.fillStyle = "rgba(46,142,222,1)";
     this.ctx.fill(this.path);
+    this.ctx.lineWidth = 1;
+    this.ctx.stroke(this.path)
   }
   isPointInPath(){
   }

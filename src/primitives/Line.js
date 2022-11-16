@@ -4,15 +4,16 @@ class Line {
     this.start_y = start_y;
     this.end_x = end_x;
     this.end_y = end_y;
-    this.name = new Path2D();
+    this.path = new Path2D();
     this.ctx = ctx;
 
   }
   display() {
-    this.name.moveTo(this.start_x, this.start_y);
-    this.name.lineTo(this.end_x, this.end_y);
+    this.path.moveTo(this.start_x, this.start_y);
+    this.path.lineTo(this.end_x, this.end_y);
+    this.ctx.strokeStyle = "white";
     this.ctx.lineWidth = 5;
-    this.ctx.stroke(this.name)
+    this.ctx.stroke(this.path)
 
 
   }

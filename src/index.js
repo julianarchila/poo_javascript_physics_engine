@@ -3,8 +3,10 @@ class Engine {
   constructor() {
     const canvas = document.createElement("canvas");
     canvas.id = ("render");
-    canvas.width = 1000;
-    canvas.height = 1000;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.background = "rgba(26,26,35,1)";
+    document.body.style.background = "rgba(26,26,35,1)";
     document.body.appendChild(canvas);
     const render = document.getElementById("render");
     this.ctx = render.getContext('2d'); 
