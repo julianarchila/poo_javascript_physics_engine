@@ -1,0 +1,25 @@
+{
+  "name": "poo_javascript_physics_engine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc && npm run build:cp-public",
+    "build:cp-public": "cp ./public/** ./dist",
+    "type": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/julianarchila/poo_javascript_physics_engine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/julianarchila/poo_javascript_physics_engine/issues"
+  },
+  "homepage": "https://github.com/julianarchila/poo_javascript_physics_engine#readme",
+  "dependencies": {
+    "typescript": "^4.9.3"
+  }
+}
