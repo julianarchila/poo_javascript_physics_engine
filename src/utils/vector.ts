@@ -7,51 +7,70 @@ export class Vector {
     this.y = y;
   }
 
-  //   static unitVectorFromDirection(direction: number): Vector {}
-
-  //   static fromPolar(length: number, angle: number): Vector {}
+  static unitVectorFromDirection(direction: number): Vector {
+    return new Vector(Math.cos(direction), Math.sin(direction));
+  }
 
   getMagnitude(): number {
-    return 1;
+    return Math.sqrt(this.x * this.x + this.y * this.y);
   }
 
-  setMagnitude(magnitude: number) {}
+  setMagnitude(magnitude: number) {
+    let direction = this.getDirection();
+    this.x = Math.cos(direction) * magnitude;
+    this.y = Math.sin(direction) * magnitude;
+  }
 
-  normalize() {}
+  normalize() {
+    let magnitude = this.getMagnitude();
+    this.x /= magnitude;
+    this.y /= magnitude;
+  }
 
   add(v2: Vector): Vector {
-    return new Vector(0, 0);
+    return new Vector(this.x + v2.x, this.y + v2.y);
   }
 
-  addTo(v2: Vector) {}
+  addTo(v2: Vector) {
+    this.x += v2.x;
+    this.y += v2.y;
+  }
 
   subtract(v2: Vector): Vector {
-    return new Vector(0, 0);
+    return new Vector(this.x - v2.x, this.y - v2.y);
   }
 
   subtractFrom(v2: Vector) {}
 
   multiply(scalar: number): Vector {
-    return new Vector(0, 0);
+    return new Vector(this.x * scalar, this.y * scalar);
   }
 
-  multiplyBy(scalar: number) {}
+  multiplyBy(scalar: number) {
+    this.x *= scalar;
+    this.y *= scalar;
+  }
 
-  //   divide(scalar: number): Vector {}
+  divide(scalar: number): Vector {
+    return new Vector(this.x / scalar, this.y / scalar);
+  }
 
-  //   divideBy(scalar: number) {}
+  divideBy(scalar: number) {
+    this.x /= scalar;
+    this.y /= scalar;
+  }
 
   dotProduct(v2: Vector): number {
-    return 0;
+    return this.x * v2.x + this.y * v2.y;
   }
 
   crossProduct(v2: Vector): number {
-    return 0;
+    return this.x * v2.y - this.y * v2.x;
   }
 
-  //   getDirection(): number {
-  //     // return Math.atan2(this.y, this.x);
-  //   }
+  getDirection(): number {
+    return Math.atan2(this.y, this.x);
+  }
 
   setDirection(direction: number) {
     let magnitude = this.getMagnitude();
@@ -59,11 +78,16 @@ export class Vector {
     this.y = Math.sin(direction) * magnitude;
   }
 
-  //   toArray(): number[] {
-  //     return [this.x, this.y, this.getDirection(), this.getMagnitude()];
-  //   }
+  toArray(): number[] {
+    return [this.x, this.y, this.getDirection(), this.getMagnitude()];
+  }
 
-  toObject(): any {
-    return {};
+  serialize(): any {
+    return {
+      x: this.x,
+      y: this.y,
+      direction: this.getDirection(),
+      magnitude: this.getMagnitude(),
+    };
   }
 }
