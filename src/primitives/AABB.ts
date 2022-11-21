@@ -1,3 +1,5 @@
+import { Vector } from "../utils/vector";
+
 class AABB {
   constructor() {}
 

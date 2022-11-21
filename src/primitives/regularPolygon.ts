@@ -1,18 +1,29 @@
 class regularPolygon {
-  constructor(sides,length, x, y,ctx) {
-    this.sides = sides
-   // this.name = name;
+  length: number;
+  sides: number;
+  y: number;
+  x: number;
+  ctx: CanvasRenderingContext2D;
+  path: Path2D;
+  constructor(
+    sides: number,
+    length: number,
+    x: number,
+    y: number,
+    ctx: CanvasRenderingContext2D
+  ) {
+    this.sides = sides;
+    // this.name = name;
     this.length = length;
     this.x = x;
     this.y = y;
     this.ctx = ctx;
     this.path = new Path2D();
-
   }
 
   display() {
     const apothem = (Math.PI * 2) / this.sides;
-    for (let i = 0; i < this.sides+1; i++) {
+    for (let i = 0; i < this.sides + 1; i++) {
       this.path.lineTo(
         this.x + this.length * Math.cos(apothem * i),
         this.y + this.length * Math.sin(apothem * i)
@@ -22,10 +33,9 @@ class regularPolygon {
     this.ctx.fillStyle = "rgba(46,142,222,1)";
     this.ctx.fill(this.path);
     this.ctx.lineWidth = 1;
-    this.ctx.stroke(this.path)
+    this.ctx.stroke(this.path);
   }
-  isPointInPath(){
-  }
+  isPointInPath() {}
 }
 
 export default regularPolygon;
