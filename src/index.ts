@@ -2,7 +2,6 @@ import { AABB, regularPolygon, Circle, Line } from "./primitives/index.js";
 import { Vector } from "./utils/vector.js";
 class Engine {
   ctx: CanvasRenderingContext2D;
-
   constructor() {
     const canvas = document.createElement("canvas");
     canvas.id = "render";
@@ -30,20 +29,17 @@ let rectangle = new engine.primitives.regularPolygon(
   100,
   engine.ctx
 );
-// let circle = new engine.primitives.Circle(new Vector(100, 400, 100, engine.ctx);
+let circle = new engine.primitives.Circle(
+  100,
+  new Vector(400, 100),
+  engine.ctx
+);
 let line = new engine.primitives.Line(200, 200, 300, 200, engine.ctx);
 function draw() {
   rectangle.display();
-  // circle.display();
+  circle.display();
   line.display();
   requestAnimationFrame(draw);
 }
 requestAnimationFrame(draw);
 console.log(engine.ctx);
-
-/* 
-
-
-let p = new Polygon( PI, Pa, Pb, ..., Pn )
-
-*/
