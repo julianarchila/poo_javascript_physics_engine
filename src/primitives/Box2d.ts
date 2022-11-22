@@ -1,7 +1,7 @@
 import { Vector } from "../utils/vector";
 
-class Box {
+class Box2D {
   size: Vector = new Vector();
 }
 
-export default Box;
+export default Box2D;
