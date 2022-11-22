@@ -1,8 +1,8 @@
+import { Vector } from "../utils/vector";
+
 class Colider {
-  _offset: number;
-  constructor() {
-    this._offset = 0.0;
-  }
+  _offset: Vector = new Vector();
+  constructor() {}
 
   getInertiaTensor(mass: number) {
     // TO-DO
