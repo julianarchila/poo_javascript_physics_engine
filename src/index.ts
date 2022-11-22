@@ -1,5 +1,5 @@
-import { AABB, regularPolygon, Circle, Line } from "./primitives/index.js";
-import { Vector } from "./utils/vector.js";
+import { AABB, regularPolygon, Circle, Line } from "./primitives/";
+import { Vector } from "./utils/vector";
 class Engine {
   ctx: CanvasRenderingContext2D;
   constructor() {
@@ -17,7 +17,7 @@ class Engine {
     AABB,
     regularPolygon,
     Circle,
-    Line,
+    Line
   };
 }
 
