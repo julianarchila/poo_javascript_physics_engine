@@ -3,7 +3,7 @@ import { AABB, regularPolygon, Circle, Line, Box2D } from "../primitives";
 class IntersectionDetector {
   constructor() {}
 
-  PointOnLine(point: Vector, line: Line) {
+  PointOnLine(point: Vector, line: Line): boolean {
     let dy = line.end.y - line.start.y;
     let dx = line.end.x - line.start.x;
 
@@ -14,7 +14,7 @@ class IntersectionDetector {
     return point.y == m * point.x + b;
   }
 
-  pointInCircle(point: Vector, circle: Circle) {
+  pointInCircle(point: Vector, circle: Circle): boolean {
     let circleCenter = circle.getCenter();
     // let centerToPoint = new Vector2f(point).sub(circleCenter);
     let centerToPoint = point.subtract(circleCenter);
@@ -22,9 +22,9 @@ class IntersectionDetector {
     return centerToPoint.Squaring() <= circle.radius * circle.radius; //crear método Squaring para elevar al cuadrado
   }
 
-  pointInAABB(point: Vector, AABB: AABB) {
-    let min = AABB.getMin();
-    let max = AABB.getMax();
+  pointInAABB(point: Vector, aabb: AABB) {
+    let min = aabb.getMin();
+    let max = aabb.getMax();
 
     return (
       point.x <= max.x &&
@@ -33,11 +33,26 @@ class IntersectionDetector {
       min.y <= point.y
     );
   }
-  pointInBox2D(point: Vector, box2D: Box2D) {
+  pointInBox2D(point: Vector, box2D: Box2D): boolean {
     //Implementar
+    let pointCopy = new Vector(point.x, point.y);
+    let boxCenter = box2D.rigidBody.position;
+    let boxRotation = box2D.rigidBody.rotation;
+
+    pointCopy.rotate(boxRotation, boxCenter);
+
+    let min = box2D.getMin();
+    let max = box2D.getMax();
+
+    return (
+      pointCopy.x <= max.x &&
+      min.x <= pointCopy.x &&
+      pointCopy.y <= max.y &&
+      min.y <= pointCopy.y
+    );
   }
 
-  lineAndCircle(line: Line, circle: Circle) {
+  lineAndCircle(line: Line, circle: Circle): boolean {
     if (
       this.pointInCircle(line.start, circle) ||
       this.pointInCircle(line.end, circle)
@@ -62,11 +77,11 @@ class IntersectionDetector {
     return this.pointInCircle(closestPoint, circle);
   }
 
-  CircleAndLine(circle: Circle, line: Line) {
+  CircleAndLine(circle: Circle, line: Line): boolean {
     return this.lineAndCircle(line, circle);
   }
 
-  CircleAndCircle(c1: Circle, c2: Circle) {
+  CircleAndCircle(c1: Circle, c2: Circle): boolean {
     // let vecBetweenCenters = new Vector2f(C1.getCenter()).sub(c2.getCenter());
     let vecBetweenCenters = c1.getCenter().subtract(c2.getCenter());
     // let radiSum = c1.getRadius() + c2.getRadius();
@@ -75,7 +90,7 @@ class IntersectionDetector {
     return vecBetweenCenters.Squaring() <= radiSum * radiSum;
   }
 
-  CircleAndAABB(circle: Circle, AABB: AABB) {
+  CircleAndAABB(circle: Circle, AABB: AABB): boolean {
     let min = AABB.getMin();
     let max = AABB.getMax();
 
@@ -99,7 +114,7 @@ class IntersectionDetector {
     return circleToAABB.Squaring() <= circle.radius * circle.radius;
   }
 
-  AABBAndCircle(box: AABB, circle: Circle) {
+  AABBAndCircle(box: AABB, circle: Circle): boolean {
     return this.CircleAndAABB(circle, box);
   }
 

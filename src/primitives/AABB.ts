@@ -5,7 +5,7 @@ import { Vector } from "../utils/vector";
 class AABB {
   center: Vector;
   size: Vector;
-  rigidBdy: Rigidbody = new Rigidbody();
+  rigidBody: Rigidbody = new Rigidbody();
 
   constructor(min: Vector, max: Vector) {
     this.size = max.subtract(min);
@@ -13,11 +13,11 @@ class AABB {
   }
 
   getMin(): Vector {
-    return this.rigidBdy.position.subtract(this.size.divide(2));
+    return this.rigidBody.position.subtract(this.size.divide(2));
   }
 
   getMax(): Vector {
-    return this.rigidBdy.position.add(this.size.divide(2));
+    return this.rigidBody.position.add(this.size.divide(2));
   }
 
   display() {}

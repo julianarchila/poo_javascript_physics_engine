@@ -86,6 +86,16 @@ export class Vector {
     return [this.x, this.y, this.getDirection(), this.getMagnitude()];
   }
 
+  rotate(angleDeg: number, origin: Vector = new Vector()) {
+    let x = this.x - origin.x;
+    let y = this.y - origin.y;
+
+    let angleRad = angleDeg * (Math.PI / 180);
+
+    this.x = x * Math.cos(angleRad) - y * Math.sin(angleRad) + origin.x;
+    this.y = x * Math.sin(angleRad) + y * Math.cos(angleRad) + origin.y;
+  }
+
   serialize(): any {
     return {
       x: this.x,
