@@ -17,7 +17,7 @@ class Engine {
     AABB,
     regularPolygon,
     Circle,
-    Line
+    Line,
   };
 }
 
@@ -34,7 +34,11 @@ let circle = new engine.primitives.Circle(
   new Vector(400, 100),
   engine.ctx
 );
-let line = new engine.primitives.Line(200, 200, 300, 200, engine.ctx);
+let line = new engine.primitives.Line(
+  new Vector(200, 200),
+  new Vector(300, 200),
+  engine.ctx
+);
 function draw() {
   rectangle.display();
   circle.display();

@@ -78,6 +78,10 @@ export class Vector {
     this.y = Math.sin(direction) * magnitude;
   }
 
+  Squaring(): number {
+    return this.x * this.x + this.y * this.y;
+  }
+
   toArray(): number[] {
     return [this.x, this.y, this.getDirection(), this.getMagnitude()];
   }

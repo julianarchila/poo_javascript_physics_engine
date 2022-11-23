@@ -4,21 +4,22 @@ class IntersectionDetector {
   constructor() {}
 
   PointOnLine(point: Vector, line: Line) {
-    let dy = line.getEnd().y - line.getStart().y;
-    let dx = line.getEnd().x - line.getStart().x;
+    let dy = line.end.y - line.start.y;
+    let dx = line.end.x - line.start.x;
 
     let m = dy / dx;
 
-    let b = line.getEnd().y + m * line.getEnd().x;
+    let b = line.end.y + m * line.end.x;
 
     return point.y == m * point.x + b;
   }
 
-  PointInCircle(point: Vector, circle: Circle) {
-    let CircleCenter = circle.getCenter();
-    let centerToPoint = new Vector2f(point).sub(circleCenter);
+  pointInCircle(point: Vector, circle: Circle) {
+    let circleCenter = circle.getCenter();
+    // let centerToPoint = new Vector2f(point).sub(circleCenter);
+    let centerToPoint = point.subtract(circleCenter);
 
-    return centerToPoint.Squaring() <= circle.getRadius() * circle.getRadius(); //crear método Squaring para elevar al cuadrado
+    return centerToPoint.Squaring() <= circle.radius * circle.radius; //crear método Squaring para elevar al cuadrado
   }
 
   pointInAABB(point: Vector, AABB: AABB) {
@@ -38,24 +39,27 @@ class IntersectionDetector {
 
   lineAndCircle(line: Line, circle: Circle) {
     if (
-      this.PointInCircle(line.getStart(), circle) ||
-      this.PointInCircle(line.getEnd(), circle)
+      this.pointInCircle(line.start, circle) ||
+      this.pointInCircle(line.end, circle)
     ) {
       return true;
     }
 
-    let ab = new Vector2f(line.getEnd()).sub(line.getStart()); //Implementar .sub
+    // let ab = new Vector2f(line.getEnd()).sub(line.getStart()); //Implementar .sub
+    let ab = line.end.subtract(line.start);
     let circleCenter = circle.getCenter();
-    let centerToLineStart = new Vector2f(circleCenter).sub(line.getStart());
-    let t = centerToLineStart.dot(ab) / ab.dot(ab); //Implementar .dot dot(vector){ return x * vector.x + y * vector.y}
+    // let centerToLineStart = new Vector2f(circleCenter).sub(line.getStart());
+    let centerToLineStart = circleCenter.subtract(line.start);
+    let t = centerToLineStart.dotProduct(ab) / ab.dotProduct(ab); //Implementar .dot dot(vector){ return x * vector.x + y * vector.y}
 
     if (t < 0 || t > 1) {
       return false;
     }
 
-    let closestPoint = new Vector2f(line.getStart()).add(ab.mul(t)); //Implementar add y mul => suma y multiplicación de vectores
+    // let closestPoint = new Vector2f(line.getStart()).add(ab.mul(t)); //Implementar add y mul => suma y multiplicación de vectores
+    let closestPoint = line.start.add(ab.multiply(t));
 
-    return pointInCirlce(closestPoint, circle);
+    return this.pointInCircle(closestPoint, circle);
   }
 
   CircleAndLine(circle: Circle, line: Line) {
@@ -63,17 +67,20 @@ class IntersectionDetector {
   }
 
   CircleAndCircle(c1: Circle, c2: Circle) {
-    let vecBetweenCenters = new Vector2f(C1.getCenter()).sub(c2.getCenter());
-    let radiSum = c1.getRadius() + c2.getRadius();
+    // let vecBetweenCenters = new Vector2f(C1.getCenter()).sub(c2.getCenter());
+    let vecBetweenCenters = c1.getCenter().subtract(c2.getCenter());
+    // let radiSum = c1.getRadius() + c2.getRadius();
+    let radiSum = c1.radius + c2.radius;
 
-    return vecBetweenCenters.Squared() <= radiSum * radiSum;
+    return vecBetweenCenters.Squaring() <= radiSum * radiSum;
   }
 
   CircleAndAABB(circle: Circle, AABB: AABB) {
     let min = AABB.getMin();
     let max = AABB.getMax();
 
-    let closestPointToCircle = new Vector2f(circle.getCenter());
+    // let closestPointToCircle = new Vector2f(circle.getCenter());
+    let closestPointToCircle = circle.getCenter();
     if (closestPointToCircle.x < min.x) {
       closestPointToCircle.x = min.x;
     } else if (closestPointToCircle.x > max.x) {
@@ -86,10 +93,10 @@ class IntersectionDetector {
       closestPointToCircle.y = max.y;
     }
 
-    let circleToAABB = new Vector2f(circle.getCenter()).sub(
-      closestPointToCircle
-    );
-    return circleToAABB.Squared() <= circle.getRadius() * circle.getRadius();
+    // let circleToAABB = new Vector2f(circle.getCenter()).sub(
+    let circleToAABB = circle.getCenter().subtract(closestPointToCircle);
+    // return circleToAABB.Squared() <= circle.getRadius() * circle.getRadius();
+    return circleToAABB.Squaring() <= circle.radius * circle.radius;
   }
 
   AABBAndCircle(box: AABB, circle: Circle) {
@@ -108,23 +115,24 @@ class IntersectionDetector {
     //Implementar
   }
 
-  lineAndAABB(line: Line, box: AABB) {
+  lineAndAABB(line: Line, aabb: AABB) {
     if (
-      this.pointInAABB(line.getStart(), box) ||
-      this.pointInAABB(line.getEnd(), box)
+      this.pointInAABB(line.start, aabb) ||
+      this.pointInAABB(line.end, aabb)
     ) {
       return true;
     }
 
-    let unitVector = new Vector2f(line.getEnd()).sub(line.getStart());
+    // let unitVector = new Vector2f(line.getEnd()).sub(line.getStart());
+    let unitVector = line.end.subtract(line.start);
     unitVector.normalize(); //Implementar normalize
     unitVector.x = unitVector.x != 0 ? 1 / unitVector.x : 0;
     unitVector.y = unitVector.y != 0 ? 1 / unitVector.y : 0;
 
-    let min = new Vector2f(AABB.getMin());
-    min.sub(line.getStart()).mul(unitVector);
-    let max = new Vector2f(AABB.getMax());
-    max.sub(line.getStart()).mul(unitVector);
+    let min = aabb.getMin();
+    min.subtract(line.start).mul(unitVector);
+    let max = aabb.getMax();
+    max.subtract(line.start).mul(unitVector);
 
     let tmin = Math.max(Math.min(min.x, max.x), Math.min(min.y, max.y));
     let tmax = Math.min(Math.max(min.x, max.x), Math.max(min.y, max.y));
@@ -146,13 +154,16 @@ class IntersectionDetector {
   RaycastCircle(circle: Circle, Ray2D: any, result: any) {
     RayCastResult.reset(result); // reset es un método de RayCastResult;
 
-    let originToCircle = new Vector2f(circle.getCenter()).sub(
-      Ray2D.getOrigin()
-    );
-    let radiusSquared = circle.getRadius() * circle.getRadius();
-    let originToCircleSquared = originToCircle.Squared();
+    // let originToCircle = new Vector2f(circle.getCenter()).sub(
+    //   Ray2D.getOrigin()
+    // );
+    let originToCircle = circle.getCenter().subtract(Ray2D.getOrigin());
+    // let radiusSquared = circle.getRadius() * circle.getRadius();
+    let radiusSquared = circle.radius * circle.radius;
+    // let originToCircleSquared = originToCircle.Squared();
+    let originToCircleSquared = originToCircle.Squaring();
 
-    let a = originToCircle.dot(Ray2D.getDirection());
+    let a = originToCircle.dotProduct(Ray2D.getDirection());
     let bSq = originToCircleSquared - a * a;
     if (radiusSquared - bSq < 0) {
       return false;
@@ -165,10 +176,12 @@ class IntersectionDetector {
       t = a - f;
     }
     if (result != null) {
-      let point = new Vector2f(Ray2D.getOrigin()).add(
-        new Vector2f(Ray2D.getDirection()).mul(t)
-      );
-      let normal = new Vector2f(point).sub(circle.getCenter());
+      // let point = new Vector2f(Ray2D.getOrigin()).add(
+      //   new Vector2f(Ray2D.getDirection()).mul(t)
+      // );
+      let point = Ray2D.getOrigin().add(Ray2D.getDirection().multiply(t));
+      // let normal = new Vector2f(point).sub(circle.getCenter());
+      let normal = point.subtract(circle.getCenter());
       normal.normalize();
 
       result.init(point, normal, true); //Init es un método de RayCastResult
@@ -177,7 +190,7 @@ class IntersectionDetector {
     return true;
   }
 
-  RaycastAABB(box: AABB, Ray2D, result) {
+  RaycastAABB(aabb: AABB, Ray2D: any, result: any) {
     RayCastResult.reset(result);
 
     let unitVector = Ray2D.getDirection();
@@ -185,9 +198,10 @@ class IntersectionDetector {
     unitVector.x = unitVector.x != 0 ? 1 / unitVector.x : 0;
     unitVector.y = unitVector.y != 0 ? 1 / unitVector.y : 0;
 
-    let min = new Vector2f(box.getMin());
-    min.sub(Ray2D.getOrigin()).mul(unitVector);
-    let max = new Vector2f(box.getMax());
+    let min = aabb.getMin();
+    min.subtract(Ray2D.getOrigin()).mul(unitVector);
+    // let max = new Vector2f(aabb.getMax());
+    let max = aabb.getMax();
     max.sub(Ray2D.getOrigin()).mul(unitVector);
 
     let tmin = Math.max(Math.min(min.x, max.x), Math.min(min.y, max.y));
@@ -204,10 +218,12 @@ class IntersectionDetector {
     }
 
     if (result != null) {
-      let point = new Vector2f(Ray2D.getOrigin()).add(
-        new Vector2f(Ray2D.getDirection()).mul(t)
-      );
-      let normal = new Vector2f(Ray2D.getOrigin()).sub(point);
+      // let point = new Vector2f(Ray2D.getOrigin()).add(
+      //   new Vector2f(Ray2D.getDirection()).mul(t)
+      // );
+      let point = Ray2D.getOrigin().add(Ray2D.getDirection().multiply(t));
+      // let normal = new Vector2f(Ray2D.getOrigin()).sub(point);
+      let normal = Ray2D.getOrigin().subtract(point);
       normal.normalize();
 
       result.init(point, normal, true);

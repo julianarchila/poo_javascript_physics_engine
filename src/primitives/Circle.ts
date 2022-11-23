@@ -24,6 +24,10 @@ class Circle {
     this.ctx.lineWidth = 1;
     this.ctx.stroke(this.path);
   }
+
+  getCenter(): Vector {
+    return this.position;
+  }
 }
 
 export default Circle;
