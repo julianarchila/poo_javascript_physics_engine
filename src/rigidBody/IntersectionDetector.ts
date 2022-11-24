@@ -6,7 +6,6 @@ const IntersectionDetector = {
     let dx = line.end.x - line.start.x;
 
     if (dx == 0) {
-      // return JMath.compare(point.x, line.getStart().x);
       return point.x == line.start.x;
     }
 
@@ -133,9 +132,7 @@ const IntersectionDetector = {
     //Implementar
   },
 
-  //Fix this:
-  /*
-   lineAndAABB(line: Line, aabb: AABB) {
+  lineAndAABB(line: Line, aabb: AABB) {
     if (
       this.pointInAABB(line.start, aabb) ||
       this.pointInAABB(line.end, aabb)
@@ -143,16 +140,18 @@ const IntersectionDetector = {
       return true;
     }
 
-    // let unitVector = new Vector2f(line.getEnd()).sub(line.getStart());
     let unitVector = line.end.subtract(line.start);
-    unitVector.normalize(); //Implementar normalize
+    unitVector.normalize();
     unitVector.x = unitVector.x != 0 ? 1 / unitVector.x : 0;
     unitVector.y = unitVector.y != 0 ? 1 / unitVector.y : 0;
 
     let min = aabb.getMin();
-    min.subtract(line.start).mul(unitVector);
+    min.subtractFrom(line.start);
+    min.multiplyByVector(unitVector);
+
     let max = aabb.getMax();
-    max.subtract(line.start).mul(unitVector);
+    max.subtractFrom(line.start);
+    max.multiplyByVector(unitVector);
 
     let tmin = Math.max(Math.min(min.x, max.x), Math.min(min.y, max.y));
     let tmax = Math.min(Math.max(min.x, max.x), Math.max(min.y, max.y));
@@ -161,12 +160,27 @@ const IntersectionDetector = {
       return false;
     }
 
-    let t = twin < 0 ? tmax : tmin;
-    return t > 0 && t * t < line.Squaring();
-  } */
+    let t = tmin < 0 ? tmax : tmin;
+    return t > 0 && t * t < line.lengthSquared();
+  },
 
   lineAndBox2D(line: Line, box2D: Box2D) {
     //Implementar
+    let angle = -box2D.rigidBody.rotation;
+    let boxCenter = box2D.rigidBody.position;
+
+    let lineStartCopy = new Vector(line.start.x, line.start.y);
+
+    lineStartCopy.rotate(angle, boxCenter);
+
+    let lineEndCopy = new Vector(line.end.x, line.end.y);
+    lineEndCopy.rotate(angle, boxCenter);
+
+    let lineCopy = new Line(lineStartCopy, lineEndCopy);
+
+    let aabb = new AABB(box2D.getMin(), box2D.getMax());
+
+    return this.lineAndAABB(lineCopy, aabb);
   },
 
   //Crear clase Ray2D y RaycastResult para el raycasting

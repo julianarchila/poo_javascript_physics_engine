@@ -6,7 +6,7 @@ class Line {
   // path: Path2D;
   ctx: any;
 
-  constructor(start: Vector, end: Vector, ctx: any) {
+  constructor(start: Vector, end: Vector, ctx: any = null) {
     this.start = start;
     this.end = end;
     // this.path = new Path2D();
@@ -20,6 +20,13 @@ class Line {
   //   this.ctx.lineWidth = 5;
   //   this.ctx.stroke(this.path);
   // }
+
+  lengthSquared() {
+    let dx = this.end.x - this.start.x;
+    let dy = this.end.y - this.start.y;
+
+    return dx * dx + dy * dy;
+  }
 }
 
 export default Line;

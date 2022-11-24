@@ -10,6 +10,7 @@ class AABB {
   constructor(min: Vector, max: Vector) {
     this.size = max.subtract(min);
     this.center = min.add(this.size.divide(2));
+    this.rigidBody.position = this.center;
   }
 
   getMin(): Vector {

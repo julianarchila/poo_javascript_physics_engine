@@ -9,6 +9,7 @@ class Box2D {
   constructor(min: Vector, max: Vector) {
     this.size = max.subtract(min);
     this.halfSize = this.size.divide(2);
+    this.rigidBody.position = min.add(this.halfSize);
   }
 
   getMin(): Vector {

@@ -40,7 +40,10 @@ export class Vector {
     return new Vector(this.x - v2.x, this.y - v2.y);
   }
 
-  subtractFrom(v2: Vector) {}
+  subtractFrom(v2: Vector) {
+    this.x -= v2.x;
+    this.y -= v2.y;
+  }
 
   multiply(scalar: number): Vector {
     return new Vector(this.x * scalar, this.y * scalar);
@@ -49,6 +52,11 @@ export class Vector {
   multiplyBy(scalar: number) {
     this.x *= scalar;
     this.y *= scalar;
+  }
+
+  multiplyByVector(v2: Vector) {
+    this.x *= v2.x;
+    this.y *= v2.y;
   }
 
   divide(scalar: number): Vector {
