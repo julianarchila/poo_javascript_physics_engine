@@ -1,5 +1,14 @@
 import { Vector } from "../utils/vector";
-import { AABB, regularPolygon, Circle, Line, Box2D } from "../primitives";
+import {
+  AABB,
+  regularPolygon,
+  Circle,
+  Line,
+  Box2D,
+  Ray,
+  RayCastResult,
+} from "../primitives";
+
 const IntersectionDetector = {
   PointOnLine(point: Vector, line: Line): boolean {
     let dy = line.end.y - line.start.y;
@@ -183,49 +192,39 @@ const IntersectionDetector = {
     return this.lineAndAABB(lineCopy, aabb);
   },
 
-  //Crear clase Ray2D y RaycastResult para el raycasting
   //Raycast
-  // FIX THIS
 
-  /* 
-  RaycastCircle(circle: Circle, Ray2D: any, result: any) {
-    RayCastResult.reset(result); // reset es un método de RayCastResult;
+  RaycastCircle(circle: Circle, ray: Ray, result: RayCastResult | null) {
+    RayCastResult.reset(result);
 
-    // let originToCircle = new Vector2f(circle.getCenter()).sub(
-    //   Ray2D.getOrigin()
-    // );
-    let originToCircle = circle.getCenter().subtract(Ray2D.getOrigin());
-    // let radiusSquared = circle.getRadius() * circle.getRadius();
+    let originToCircle = circle.getCenter().subtract(ray.origin);
     let radiusSquared = circle.radius * circle.radius;
-    // let originToCircleSquared = originToCircle.Squared();
     let originToCircleSquared = originToCircle.Squaring();
 
-    let a = originToCircle.dotProduct(Ray2D.getDirection());
+    let a = originToCircle.dotProduct(ray.direction);
     let bSq = originToCircleSquared - a * a;
     if (radiusSquared - bSq < 0) {
       return false;
     }
     let f = Math.sqrt(radiusSquared - bSq);
     let t = 0;
+
     if (originToCircleSquared < radiusSquared) {
       t = a + f;
     } else {
       t = a - f;
     }
+
     if (result != null) {
-      // let point = new Vector2f(Ray2D.getOrigin()).add(
-      //   new Vector2f(Ray2D.getDirection()).mul(t)
-      // );
-      let point = Ray2D.getOrigin().add(Ray2D.getDirection().multiply(t));
-      // let normal = new Vector2f(point).sub(circle.getCenter());
+      let point = ray.origin.add(ray.direction.multiply(t));
       let normal = point.subtract(circle.getCenter());
       normal.normalize();
 
-      result.init(point, normal, true); //Init es un método de RayCastResult
+      result.init(point, normal, true, t);
     }
 
     return true;
-  } */
+  },
 
   // FIX THIS
 
