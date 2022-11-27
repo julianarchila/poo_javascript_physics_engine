@@ -13,7 +13,7 @@ Para correr los tests:
 
 Después de compilar, se puede abrir el archivo `public/index.html` 
 
-                                                                  MOTOR DE FÍSICAS 2D
+MOTOR DE FÍSICAS 2D
 
 Integrantes: Julián Archila, David Daza y Santiago Botero.
 
