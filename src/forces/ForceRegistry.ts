@@ -31,3 +31,4 @@ class ForceRegistry{
         })
     }
 }
+export default ForceRegistry

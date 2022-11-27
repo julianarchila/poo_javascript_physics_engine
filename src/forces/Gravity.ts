@@ -8,7 +8,6 @@ class Gravity implements ForceGenerator{
         this.gravity = force;
     }
 
-    @Override
     updateForce(body: Rigidbody, dt: number): void {
         body.addForce(this.gravity.multiply(body.mass));
     }
