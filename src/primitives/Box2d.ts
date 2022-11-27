@@ -38,8 +38,12 @@ class Box2D {
         vertices[i] = vertices[i].add(center);
       }
     }
-
     return vertices;
+  }
+  setSize(size: Vector){
+    this.size = size;
+    this.halfSize.x = size.x/2;
+    this.halfSize.y = size.y/2;
   }
 }
 

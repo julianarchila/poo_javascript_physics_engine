@@ -28,6 +28,7 @@ class Circle {
   getCenter(): Vector {
     return this.position;
   }
+
 }
 
 export default Circle;

@@ -8,16 +8,32 @@ class Rigidbody {
   linearDamping : number = 0.0;
   angularDamping : number = 0.0;
   fixedRotation : boolean = false;
-  getPosition(){
-   return this.position;
-  }
+  mass : number = 0.0;
+  inverseMass : number = 0.0;
+  forceAccum :Vector = new Vector();
   setTransform(position: Vector, rotation : number){
     this.position = position;
     this.rotation = rotation;
-
   }
-  getRotaion(){
-    return this.rotation;
+  setMass(mass : number){
+    this.mass = mass;
+    if (this.mass != 0.0){
+      this.inverseMass = 1.0/this.mass;
+    }
+  }
+  physicsUpdate(dt: number){
+    if (this.mass == 0.0) return;
+    let acceleration = this.forceAccum.multiply(this.inverseMass);
+    this.linearVelocity.add(acceleration.multiply(dt));
+    this.position.add((this.linearVelocity).multiply(dt));
+    //no se si sea necesario sincronizar colisiones
+    this.clearAccumulators();
+  }
+  clearAccumulators(){
+    this.forceAccum.zero();
+  }
+  addForce(force: Vector){
+    this.forceAccum.add(force);
   }
 }
 

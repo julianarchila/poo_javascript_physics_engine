@@ -1,3 +1,5 @@
+import { isThisTypeNode } from "typescript";
+
 export class Vector {
   public x: number;
   public y: number;
@@ -111,5 +113,9 @@ export class Vector {
       direction: this.getDirection(),
       magnitude: this.getMagnitude(),
     };
+  }
+  zero(){
+    this.x = 0.0;
+    this.y = 0.0;
   }
 }
