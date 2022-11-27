@@ -1,10 +1,8 @@
 import Rigidbody from "../rigidBody/RigidBody";
 
-class ForceGenerator{
-    updateForce(RigidBody: Body, dt: number){
-        
+interface ForceGenerator{
+    updateForce(body: Rigidbody, dt: number):void;
     }
     
-}
 
 export default ForceGenerator;
