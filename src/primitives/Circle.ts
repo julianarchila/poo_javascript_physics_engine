@@ -1,34 +1,18 @@
 import { Vector } from "../utils/vector";
+import Style from "./style";
 class Circle {
   radius: number;
   position: Vector;
-  ctx: CanvasRenderingContext2D;
-  path: Path2D;
+  style: Style = new Style();
 
-  constructor(radius: number, position: Vector, ctx: CanvasRenderingContext2D) {
+  constructor(radius: number, position: Vector) {
     this.radius = radius;
     this.position = position;
-    this.ctx = ctx;
-    this.path = new Path2D();
-  }
-  display() {
-    this.path.arc(
-      this.position.x,
-      this.position.y,
-      this.radius,
-      0,
-      2 * Math.PI
-    );
-    this.ctx.fillStyle = "rgba(241,91,96,1)";
-    this.ctx.fill(this.path);
-    this.ctx.lineWidth = 1;
-    this.ctx.stroke(this.path);
   }
 
   getCenter(): Vector {
     return this.position;
   }
-
 }
 
 export default Circle;

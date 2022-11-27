@@ -1,5 +1,6 @@
 import Rigidbody from "../rigidBody/RigidBody";
 import { Vector } from "../utils/vector";
+import Style from "./style";
 
 // Axis Aligned Bounding Box
 class AABB {
@@ -8,6 +9,7 @@ class AABB {
   halfSize: Vector = new Vector();
   rigidBody: Rigidbody = new Rigidbody();
 
+  style: Style = new Style();
 
   constructor(min: Vector, max: Vector) {
     this.size = max.subtract(min);
@@ -23,13 +25,11 @@ class AABB {
   getMax(): Vector {
     return this.rigidBody.position.add(this.size.divide(2));
   }
-  setSize(size: Vector){
+  setSize(size: Vector) {
     this.size = size;
-    this.halfSize.x = size.x/2;
-    this.halfSize.y = size.y/2;
+    this.halfSize.x = size.x / 2;
+    this.halfSize.y = size.y / 2;
   }
-
-  display() {}
 }
 
 export default AABB;
