@@ -33,9 +33,7 @@ class Box2D {
     if (this.rigidBody.rotation != 0) {
       let center = this.rigidBody.position;
       for (let i = 0; i < vertices.length; i++) {
-        vertices[i] = vertices[i].subtract(center);
-        vertices[i].rotate(this.rigidBody.rotation);
-        vertices[i] = vertices[i].add(center);
+        vertices[i].rotate(this.rigidBody.rotation, center);
       }
     }
 

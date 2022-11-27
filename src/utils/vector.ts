@@ -7,6 +7,32 @@ export class Vector {
     this.y = y;
   }
 
+  get(component: number): number {
+    // Get the value of the specified component of this vector.
+    // if component is not within the range [0,1] raise an error.
+    if (component < 0 || component > 1) {
+      throw new Error("Invalid component index.");
+    }
+
+    if (component == 0) {
+      return this.x;
+    }
+
+    return this.y;
+  }
+
+  setComponent(component: number, value: number) {
+    if (component < 0 || component > 1) {
+      throw new Error("Invalid component index.");
+    }
+
+    if (component == 0) {
+      this.x = value;
+    } else {
+      this.y = value;
+    }
+  }
+
   static unitVectorFromDirection(direction: number): Vector {
     return new Vector(Math.cos(direction), Math.sin(direction));
   }
