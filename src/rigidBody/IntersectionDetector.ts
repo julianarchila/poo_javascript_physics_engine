@@ -226,22 +226,23 @@ const IntersectionDetector = {
     return true;
   },
 
-  // FIX THIS
-
-  /*
-  RaycastAABB(aabb: AABB, Ray2D: any, result: any) {
+  RaycastAABB(aabb: AABB, ray: Ray, result: RayCastResult | null) {
     RayCastResult.reset(result);
 
-    let unitVector = Ray2D.getDirection();
+    let unitVector = ray.direction;
     unitVector.normalize(); //Implementar normalize
     unitVector.x = unitVector.x != 0 ? 1 / unitVector.x : 0;
     unitVector.y = unitVector.y != 0 ? 1 / unitVector.y : 0;
 
     let min = aabb.getMin();
-    min.subtract(Ray2D.getOrigin()).mul(unitVector);
-    // let max = new Vector2f(aabb.getMax());
+
+    min.subtractFrom(ray.origin);
+    min.multiplyByVector(unitVector);
+
     let max = aabb.getMax();
-    max.sub(Ray2D.getOrigin()).mul(unitVector);
+
+    max.subtractFrom(ray.origin);
+    max.multiplyByVector(unitVector);
 
     let tmin = Math.max(Math.min(min.x, max.x), Math.min(min.y, max.y));
     let tmax = Math.min(Math.max(min.x, max.x), Math.max(min.y, max.y));
@@ -250,30 +251,74 @@ const IntersectionDetector = {
       return false;
     }
 
-    let t = twin < 0 ? tmax : tmin;
+    let t = tmin < 0 ? tmax : tmin;
     let hit = t > 0;
     if (!hit) {
       return false;
     }
 
     if (result != null) {
-      // let point = new Vector2f(Ray2D.getOrigin()).add(
-      //   new Vector2f(Ray2D.getDirection()).mul(t)
-      // );
-      let point = Ray2D.getOrigin().add(Ray2D.getDirection().multiply(t));
-      // let normal = new Vector2f(Ray2D.getOrigin()).sub(point);
-      let normal = Ray2D.getOrigin().subtract(point);
+      let point = ray.origin.add(ray.direction.multiply(t));
+      let normal = ray.origin.subtract(point);
       normal.normalize();
 
-      result.init(point, normal, true);
+      result.init(point, normal, true, t);
     }
 
     return true;
-  }
-  */
+  },
 
-  RaycastBox2D(box: Box2D, Ray2D: any, result: any) {
-    //Implementar
+  RaycastBox2D(box: Box2D, ray: Ray, result: RayCastResult | null) {
+    RayCastResult.reset(result);
+
+    let size = box.halfSize;
+    let xAxis = new Vector(1, 0);
+    let yAxis = new Vector(0, 1);
+
+    xAxis.rotate(-box.rigidBody.rotation); // rotate the axis around (0,0)
+    yAxis.rotate(-box.rigidBody.rotation);
+
+    let p = box.rigidBody.position.subtract(ray.origin);
+
+    let f = new Vector(
+      xAxis.dotProduct(ray.direction),
+      yAxis.dotProduct(ray.direction)
+    );
+
+    let e = new Vector(xAxis.dotProduct(p), yAxis.dotProduct(p));
+
+    let tArr = [0, 0, 0, 0];
+
+    for (let i = 0; i < 2; i++) {
+      if (Math.abs(f.get(i)) > 0.00001) {
+        if (-e.get(i) - size.get(i) > 0 || -e.get(i) + size.get(i) < 0) {
+          return false;
+        }
+
+        f.setComponent(i, 0.00001);
+      }
+
+      tArr[i * 2 + 0] = (e.get(i) + size.get(i)) / f.get(i);
+      tArr[i * 2 + 1] = (e.get(i) - size.get(i)) / f.get(i);
+    }
+
+    let tmin = Math.max(Math.min(tArr[0], tArr[1]), Math.min(tArr[2], tArr[3]));
+    let tmax = Math.min(Math.max(tArr[0], tArr[1]), Math.max(tArr[2], tArr[3]));
+
+    let t = tmin < 0 ? tmax : tmin;
+    let hit = t > 0;
+    if (!hit) {
+      return false;
+    }
+
+    if (result != null) {
+      let point = ray.origin.add(ray.direction.multiply(t));
+      let normal = ray.origin.subtract(point);
+
+      normal.normalize();
+
+      result.init(point, normal, true, t);
+    }
   },
 };
 
