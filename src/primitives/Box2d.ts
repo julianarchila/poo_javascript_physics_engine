@@ -1,10 +1,13 @@
 import Rigidbody from "../rigidBody/RigidBody";
 import { Vector } from "../utils/vector";
+import Style from "./style";
 
 class Box2D {
   size: Vector = new Vector();
   halfSize: Vector = new Vector();
   rigidBody: Rigidbody = new Rigidbody();
+
+  style: Style = new Style();
 
   constructor(min: Vector, max: Vector) {
     this.size = max.subtract(min);
@@ -38,10 +41,10 @@ class Box2D {
     }
     return vertices;
   }
-  setSize(size: Vector){
+  setSize(size: Vector) {
     this.size = size;
-    this.halfSize.x = size.x/2;
-    this.halfSize.y = size.y/2;
+    this.halfSize.x = size.x / 2;
+    this.halfSize.y = size.y / 2;
   }
 }
 
