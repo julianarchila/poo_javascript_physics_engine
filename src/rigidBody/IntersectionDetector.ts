@@ -8,6 +8,7 @@ import {
   Ray,
   RayCastResult,
 } from "../primitives";
+import { overlapOnAxis } from "../utils/sat";
 
 const IntersectionDetector = {
   PointOnLine(point: Vector, line: Line): boolean {
@@ -101,11 +102,10 @@ const IntersectionDetector = {
     return vecBetweenCenters.Squaring() <= radiSum * radiSum;
   },
 
-  CircleAndAABB(circle: Circle, AABB: AABB): boolean {
-    let min = AABB.getMin();
-    let max = AABB.getMax();
+  CircleAndAABB(circle: Circle, aabb: AABB): boolean {
+    let min = aabb.getMin();
+    let max = aabb.getMax();
 
-    // let closestPointToCircle = new Vector2f(circle.getCenter());
     let closestPointToCircle = circle.getCenter();
     if (closestPointToCircle.x < min.x) {
       closestPointToCircle.x = min.x;
@@ -119,26 +119,37 @@ const IntersectionDetector = {
       closestPointToCircle.y = max.y;
     }
 
-    // let circleToAABB = new Vector2f(circle.getCenter()).sub(
     let circleToAABB = circle.getCenter().subtract(closestPointToCircle);
-    // return circleToAABB.Squared() <= circle.getRadius() * circle.getRadius();
     return circleToAABB.Squaring() <= circle.radius * circle.radius;
   },
 
-  AABBAndCircle(box: AABB, circle: Circle): boolean {
-    return this.CircleAndAABB(circle, box);
-  },
+  CircleAndBox2D(circle: Circle, box: Box2D): boolean {
+    let min = box.getMin();
+    let max = box.getMax();
 
-  CircleAndBox2D(circle: Circle, Box2D: Box2D) {
-    //Implementar
-  },
+    // Create a circle in the box's coordinate system
+    let r = circle.getCenter().subtract(box.rigidBody.position);
 
-  AABBAndAABB(b1: AABB, b2: AABB) {
-    //Implementar
-  },
+    // Rotate the circle's center point back
+    r.rotate(-box.rigidBody.rotation, new Vector(0, 0));
 
-  AABBAndBox2D(AABB: AABB, b: Box2D) {
-    //Implementar
+    let localCirclePos = r.add(box.rigidBody.position);
+
+    let closestPointToCircle = new Vector(localCirclePos.x, localCirclePos.y);
+    if (closestPointToCircle.x < min.x) {
+      closestPointToCircle.x = min.x;
+    } else if (closestPointToCircle.x > max.x) {
+      closestPointToCircle.x = max.x;
+    }
+
+    if (closestPointToCircle.y < min.y) {
+      closestPointToCircle.y = min.y;
+    } else if (closestPointToCircle.y > max.y) {
+      closestPointToCircle.y = max.y;
+    }
+
+    let circleToBox = localCirclePos.subtract(closestPointToCircle);
+    return circleToBox.Squaring() <= circle.radius * circle.radius;
   },
 
   lineAndAABB(line: Line, aabb: AABB) {
@@ -319,6 +330,44 @@ const IntersectionDetector = {
 
       result.init(point, normal, true, t);
     }
+  },
+
+  AABBAndCircle(box: AABB, circle: Circle): boolean {
+    return this.CircleAndAABB(circle, box);
+  },
+
+  AABBAndAABB(b1: AABB, b2: AABB): boolean {
+    let axes = [new Vector(1, 0), new Vector(0, 1)];
+
+    for (let i = 0; i < axes.length; i++) {
+      let axis = axes[i];
+      if (!overlapOnAxis(b1, b2, axis)) {
+        return false;
+      }
+    }
+
+    return true;
+  },
+
+  AABBAndBox2D(b1: AABB, b2: Box2D): boolean {
+    let axes: Array<Vector> = [
+      new Vector(1, 0),
+      new Vector(0, 1),
+      new Vector(1, 0),
+      new Vector(0, 1),
+    ];
+
+    axes[2].rotate(b2.rigidBody.rotation, b2.rigidBody.position);
+    axes[3].rotate(b2.rigidBody.rotation, b2.rigidBody.position);
+
+    for (let i = 0; i < axes.length; i++) {
+      let axis = axes[i];
+      if (!overlapOnAxis(b1, b2, axis)) {
+        return false;
+      }
+    }
+
+    return true;
   },
 };
 
