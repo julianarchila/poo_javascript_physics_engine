@@ -15,7 +15,7 @@ Después de compilar, se puede abrir el archivo `public/index.html`
 
 MOTOR DE FÍSICAS 2D
 
-Integrantes: Julián Archila, David Daza y Santiago Botero
+Integrantes: Julián Archila, David Daza y Santiago Botero.
 
 Introducción: Nuestro proyecto consistió en el desarrollo de un motor de físicas en 2D con la implementación de un sistema de colisiones y de fuerzas. Todo esto se hizo usando Typescript.
 
