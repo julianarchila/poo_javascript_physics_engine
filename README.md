@@ -14,6 +14,7 @@ Para correr los tests:
 Después de compilar, se puede abrir el archivo `public/index.html` 
 
 MOTOR DE FÍSICAS 2D
+
 Integrantes: Julián Archila, David Daza y Santiago Botero
 
 Introducción: Nuestro proyecto consistió en el desarrollo de un motor de físicas en 2D con la implementación de un sistema de colisiones y de fuerzas. Todo esto se hizo usando Typescript.
@@ -41,6 +42,6 @@ Conclusiones:
 
 •	La programación orientada a objetos es bastante útil para crear código reutilizable y fácil de arreglar o modificar.
 
-•	El álgebra lineal optimiza bastante el cálculo de operaciones que involucren rectas y puntos, su conocimiento facilita la resolución de problemas geométricos.
+•	El álgebra lineal optimiza bastante el cálculo de operaciones que involucren rectas y puntos, su conocimiento facilita la resolución de problemas   geométricos.
 
 Trabajo	futuro: Crear un videojuego usando netamente el motor de físicas en 2D.	
