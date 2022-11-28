@@ -4,26 +4,7 @@ import Renderer from "./render";
 import PhysicsEngine from "./PhysicsSystem";
 import Rigidbody from "./rigidBody/RigidBody";
 
-// class Engine {
-//   ctx: CanvasRenderingContext2D;
-//   constructor() {
-//     const canvas = document.createElement("canvas");
-//     canvas.id = "render";
-//     canvas.width = window.innerWidth;
-//     canvas.height = window.innerHeight;
-//     canvas.style.background = "rgba(26,26,35,1)";
-//     document.body.style.background = "rgba(26,26,35,1)";
-//     document.body.appendChild(canvas);
-//     const render = document.getElementById("render") as any;
-//     this.ctx = render.getContext("2d");
-//   }
-//   primitives = {
-//     AABB,
-//     regularPolygon,
-//     Circle,
-//     Line,
-//   };
-// }
+let frameRate = 60;
 
 let renderer = new Renderer(
   window.innerHeight,
@@ -33,21 +14,30 @@ let renderer = new Renderer(
 
 renderer.canvas!.style.background = "rgba(26,26,35,1)";
 
-let engine = new PhysicsEngine(1 / 60, new Vector(0, -9.8));
+let engine = new PhysicsEngine(1 / frameRate, new Vector(0, 9.8));
 console.log(engine);
 
 let c1 = new Circle(50, new Vector(100, 100));
+c1.rigidBody.setMass(100);
 c1.style.color = "red";
-let rb1 = new Rigidbody();
-rb1.setTransform(c1.getCenter(),2);
-rb1.setMass(100);
+c1.rigidBody.setTransform(c1.getCenter(), 2);
 
-engine.addRigidbody(rb1);
+engine.addRigidbody(c1.rigidBody);
 renderer.addElement(c1);
 
-console.log(engine);
+let c2 = new Circle(50, new Vector(200, 100));
+c2.rigidBody.setMass(100);
+c2.style.color = "blue";
+c2.rigidBody.setTransform(c2.getCenter(), 2);
 
-setInterval(() => {
+engine.addRigidbody(c2.rigidBody);
+renderer.addElement(c2);
+
+const gameLoop = () => {
+  let dt = 1 / frameRate;
+  engine.update(dt);
   renderer.display();
-  engine.update(1 / 60);
-}, 1000 / 60);
+  requestAnimationFrame(gameLoop);
+};
+
+requestAnimationFrame(gameLoop);

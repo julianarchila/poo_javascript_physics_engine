@@ -83,6 +83,7 @@ class Renderer {
   }
 
   display() {
+    this.clear();
     this.elements.forEach((element) => {
       if (element instanceof Line) {
         this._displayLine(element);
@@ -98,6 +99,10 @@ class Renderer {
         this._displayRegularPolygon(element);
       }
     });
+  }
+
+  clear() {
+    this.ctx!.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
   }
 }
 
