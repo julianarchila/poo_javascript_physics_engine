@@ -1,49 +1,49 @@
 import { AABB, regularPolygon, Circle, Line } from "./primitives/";
 import { Vector } from "./utils/vector";
-class Engine {
-  ctx: CanvasRenderingContext2D;
-  constructor() {
-    const canvas = document.createElement("canvas");
-    canvas.id = "render";
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvas.style.background = "rgba(26,26,35,1)";
-    document.body.style.background = "rgba(26,26,35,1)";
-    document.body.appendChild(canvas);
-    const render = document.getElementById("render") as any;
-    this.ctx = render.getContext("2d");
-  }
-  primitives = {
-    AABB,
-    regularPolygon,
-    Circle,
-    Line,
-  };
-}
+import Renderer from "./render";
+import PhysicsEngine from "./PhysicsEngine";
 
-let engine = new Engine();
-let rectangle = new engine.primitives.regularPolygon(
-  6,
-  100,
-  100,
-  100,
-  engine.ctx
+// class Engine {
+//   ctx: CanvasRenderingContext2D;
+//   constructor() {
+//     const canvas = document.createElement("canvas");
+//     canvas.id = "render";
+//     canvas.width = window.innerWidth;
+//     canvas.height = window.innerHeight;
+//     canvas.style.background = "rgba(26,26,35,1)";
+//     document.body.style.background = "rgba(26,26,35,1)";
+//     document.body.appendChild(canvas);
+//     const render = document.getElementById("render") as any;
+//     this.ctx = render.getContext("2d");
+//   }
+//   primitives = {
+//     AABB,
+//     regularPolygon,
+//     Circle,
+//     Line,
+//   };
+// }
+
+let renderer = new Renderer(
+  window.innerHeight,
+  window.innerWidth,
+  document.body
 );
-let circle = new engine.primitives.Circle(
-  100,
-  new Vector(400, 100),
-  engine.ctx
-);
-let line = new engine.primitives.Line(
-  new Vector(200, 200),
-  new Vector(300, 200),
-  engine.ctx
-);
-function draw() {
-  rectangle.display();
-  circle.display();
-  line.display();
-  requestAnimationFrame(draw);
-}
-requestAnimationFrame(draw);
-console.log(engine.ctx);
+
+renderer.canvas!.style.background = "rgba(26,26,35,1)";
+
+let engine = new PhysicsEngine(1 / 60, new Vector(0, -9.8));
+console.log(engine);
+
+let c1 = new Circle(50, new Vector(100, 100));
+c1.style.color = "red";
+
+engine.addRigidbody(c1.rigidBody);
+renderer.addElement(c1);
+
+console.log(engine);
+
+setInterval(() => {
+  renderer.display();
+  engine.update(1 / 60);
+}, 1000 / 60);

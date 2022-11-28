@@ -3,22 +3,23 @@ import { AABB, Circle, Line, Box2D, Ray, regularPolygon } from "../primitives";
 class Renderer {
   ctx: CanvasRenderingContext2D | null = null;
   id: string;
+  canvas: HTMLCanvasElement | null = null;
   elements: Array<Line | Circle | AABB | Box2D | Ray | regularPolygon> = [];
   constructor(height: number, width: number, element: HTMLElement) {
     this.id = "canvas" + Math.floor(Math.random() * 1000000);
 
     // create a new canvas, and append it to the element
-    const canvas = document.createElement("canvas");
-    canvas.height = height;
-    canvas.width = width;
+    this.canvas = document.createElement("canvas");
+    this.canvas.height = height;
+    this.canvas.width = width;
 
-    canvas.id = this.id;
+    this.canvas.id = this.id;
 
-    if (canvas.getContext) {
-      this.ctx = canvas.getContext("2d");
+    if (this.canvas.getContext) {
+      this.ctx = this.canvas.getContext("2d");
     }
 
-    element.appendChild(canvas);
+    element.appendChild(this.canvas);
   }
 
   addElement(element: Line | Circle | AABB | Box2D | Ray | regularPolygon) {
@@ -38,8 +39,8 @@ class Renderer {
   _displayCircle(circle: Circle) {
     let path = new Path2D();
     path.arc(
-      circle.position.x,
-      circle.position.y,
+      circle.getCenter().x,
+      circle.getCenter().y,
       circle.radius,
       0,
       2 * Math.PI
