@@ -32,6 +32,8 @@ A continuación, adjuntaremos las referencias y videos que nos fueron realmente 
 
 •	https://www.youtube.com/watch?v=iHJhdrrcA0s&list=PLM-p96nOrGcZv2ji6YYPMt8INypYnIUR2
 
+•       http://www.r-5.org/files/books/computers/algo-list/realtime-3d/Ian_Millington-Game_Physics_Engine_Development-EN.pdf
+
 Desarrollo: Partimos con la creación de las primitivas, esto lo hicimos con clases, además de ello definimos diferentes métodos que facilitarían la creación del sistema de colisiones. 
 
 Con las primitivas hechas, pasamos al sistema de colisiones, para el cual nos fue bastante útil crear una utilidad para los vectores (definir la clase vector y crear métodos para calcular el producto, la suma, la normalización de vectores, etc.) lo que facilita bastante el cálculo de las intersecciones entre las diferentes primitivas. Cabe aclarar que para el cálculo de las intersecciones fue necesario un poco de conocimiento básico de álgebra lineal e hicimos pruebas unitarias para cada función con el fin de facilitar la corrección del código.
