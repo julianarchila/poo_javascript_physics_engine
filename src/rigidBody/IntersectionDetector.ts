@@ -371,4 +371,6 @@ const IntersectionDetector = {
   },
 };
 
+// const Detector(a: AABB | Box2D| Ray | Circle )
+
 export default IntersectionDetector;
