@@ -5,7 +5,7 @@ import ForceGenerator from "./ForceGenerator";
 class Gravity implements ForceGenerator{
     gravity: Vector;
     constructor(force: Vector){
-        this.gravity = force;
+        this.gravity = new Vector(force.x,force.y);
     }
 
     updateForce(body: Rigidbody, dt: number): void {

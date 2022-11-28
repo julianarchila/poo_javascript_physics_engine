@@ -1,3 +1,4 @@
+import { Circle } from "../primitives";
 import { Vector } from "../utils/vector";
 
 class Rigidbody {

@@ -1,7 +1,8 @@
-import { AABB, regularPolygon, Circle, Line } from "./primitives/";
+import { AABB, regularPolygon, Circle, Line, Box2D } from "./primitives/";
 import { Vector } from "./utils/vector";
 import Renderer from "./render";
 import PhysicsEngine from "./PhysicsSystem";
+import Rigidbody from "./rigidBody/RigidBody";
 
 // class Engine {
 //   ctx: CanvasRenderingContext2D;
@@ -37,8 +38,11 @@ console.log(engine);
 
 let c1 = new Circle(50, new Vector(100, 100));
 c1.style.color = "red";
+let rb1 = new Rigidbody();
+rb1.setTransform(c1.getCenter(),2);
+rb1.setMass(100);
 
-engine.addRigidbody(c1.rigidBody);
+engine.addRigidbody(rb1);
 renderer.addElement(c1);
 
 console.log(engine);

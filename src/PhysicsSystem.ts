@@ -15,7 +15,7 @@ class PhysicsSystem {
   }
   fixedUpdater() {
     this.forceRegistry.updateForces(this.fixedUpdate);
-    for (let i = 0; this.rigidbodies.length; i++) {
+    for (let i = 0; i < this.rigidbodies.length; i++) {
       this.rigidbodies[i].physicsUpdate(this.fixedUpdate);
     }
   }
