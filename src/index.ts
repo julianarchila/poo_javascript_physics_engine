@@ -1,7 +1,7 @@
 import { AABB, regularPolygon, Circle, Line } from "./primitives/";
 import { Vector } from "./utils/vector";
 import Renderer from "./render";
-import PhysicsEngine from "./PhysicsEngine";
+import PhysicsEngine from "./PhysicsSystem";
 
 // class Engine {
 //   ctx: CanvasRenderingContext2D;
