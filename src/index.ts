@@ -1,4 +1,4 @@
-import { AABB, regularPolygon, Circle, Line, Box2D } from "./primitives/";
+import { AABB, regularPolygon, Circle, Line, Box2D, Ray } from "./primitives/";
 import { Vector } from "./utils/vector";
 import Renderer from "./render";
 import PhysicsEngine from "./PhysicsSystem";
@@ -32,6 +32,19 @@ c2.rigidBody.setTransform(c2.getCenter(), 2);
 
 engine.addRigidbody(c2.rigidBody);
 renderer.addElement(c2);
+
+let box1 = new Box2D(new Vector(300, 100), new Vector(400, 200));
+box1.rigidBody.rotation = 45;
+box1.style.color = "red";
+box1.rigidBody.setMass(100);
+box1.rigidBody.setTransform(box1.rigidBody.position, 2);
+
+engine.addRigidbody(box1.rigidBody);
+renderer.addElement(box1);
+
+// let ray1 = new Ray(new Vector(30, 500), new Vector(1, -1));
+// ray1.style.color = "red";
+// renderer.addElement(ray1);
 
 const gameLoop = () => {
   let dt = 1 / frameRate;
