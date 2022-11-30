@@ -19,7 +19,7 @@ renderer.canvas!.style.background = "rgba(26,26,35,1)";
 let engine = new PhysicsEngine(1 / frameRate, new Vector(0, 9.8));
 console.log(engine);
 
-let c1 = new Circle(50, new Vector(100, 100));
+let c1 = new Circle(50, new Vector(200, 100));
 c1.rigidBody.setMass(100);
 c1.style.color = "blue";
 c1.rigidBody.setTransform(c1.getCenter(), 2);
@@ -27,7 +27,7 @@ c1.rigidBody.setTransform(c1.getCenter(), 2);
 engine.addRigidbody(c1.rigidBody);
 renderer.addElement(c1);
 
-let c2 = new Circle(50, new Vector(100, 500));
+let c2 = new Circle(50, new Vector(200, 500));
 c2.rigidBody.setMass(0);
 c2.style.color = "blue";
 c2.rigidBody.setTransform(c2.getCenter(), 2);
@@ -44,9 +44,9 @@ renderer.addElement(c2);
 // engine.addRigidbody(box1.rigidBody);
 // renderer.addElement(box1);
 
-// let ray1 = new Ray(new Vector(30, 500), new Vector(1, -1));
-// ray1.style.color = "red";
-// renderer.addElement(ray1);
+let ray1 = new Ray(new Vector(30, 500), new Vector(1, -1));
+ray1.style.color = "red";
+renderer.addElement(ray1);
 
 const gameLoop = () => {
   let dt = 1 / frameRate;

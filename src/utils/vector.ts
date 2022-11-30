@@ -9,6 +9,12 @@ export class Vector {
     this.y = y;
   }
 
+  static distance(v1: Vector, v2: Vector): number {
+    return Math.sqrt(
+      (v2.x - v1.x) * (v2.x - v1.x) + (v2.y - v1.y) * (v2.y - v1.y)
+    );
+  }
+
   get(component: number): number {
     // Get the value of the specified component of this vector.
     // if component is not within the range [0,1] raise an error.
@@ -140,7 +146,7 @@ export class Vector {
       magnitude: this.getMagnitude(),
     };
   }
-  zero(){
+  zero() {
     this.x = 0.0;
     this.y = 0.0;
   }

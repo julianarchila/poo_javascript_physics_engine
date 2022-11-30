@@ -1,5 +1,14 @@
-import { AABB, Circle, Line, Box2D, Ray, regularPolygon } from "../primitives";
+import {
+  AABB,
+  Circle,
+  Line,
+  Box2D,
+  Ray,
+  regularPolygon,
+  RayCastResult,
+} from "../primitives";
 import { Vector } from "../utils/vector";
+import IntersectionDetector from "../rigidBody/IntersectionDetector";
 
 class Renderer {
   ctx: CanvasRenderingContext2D | null = null;
@@ -93,102 +102,76 @@ class Renderer {
   }
 
   _displayRay(ray: Ray) {
-    // ray has a position and a direction
-    // we need to draw a line from the position to the direction until it hits the edge of the canvas
-    // draw a a little arrow at the end of the line
+    // draw the ray and iterate over the elements, if it colides with any, draw the intersection point and stop there
 
-    // get the canvas dimensions
-    let width = this.canvas!.width;
-    let height = this.canvas!.height;
+    let collisionPoints = [];
 
-    // get the position and direction of the ray
-    let position: Vector = ray.origin;
-    let direction: Vector = ray.direction;
+    for (let i = 0; i < this.elements.length; i++) {
+      let element = this.elements[i];
 
-    // get the slope of the ray
-    let slope = direction.y / direction.x;
+      if (element instanceof Circle) {
+        let result: RayCastResult = new RayCastResult();
 
-    // get the y-intercept of the ray
-    let y_intercept = position.y - slope * position.x;
+        IntersectionDetector.RaycastCircle(element, ray, result);
 
-    // get the x-intercept of the ray
-    let x_intercept = position.x - position.y / slope;
-
-    // get the x and y values of the end of the ray
-    let x = 0;
-    let y = 0;
-
-    // if the ray is going up
-    if (direction.y > 0) {
-      // if the ray is going right
-      if (direction.x > 0) {
-        // if the ray hits the top first
-        if (slope * width + y_intercept < height) {
-          x = width;
-          y = slope * width + y_intercept;
-        } else {
-          x = (height - y_intercept) / slope;
-          y = height;
+        if (result.hit) {
+          collisionPoints.push(result.point);
         }
-      } else {
-        // if the ray hits the top first
-        if (slope * 0 + y_intercept < height) {
-          x = 0;
-          y = slope * 0 + y_intercept;
-        } else {
-          x = (height - y_intercept) / slope;
-          y = height;
+      } else if (element instanceof AABB) {
+        let result: RayCastResult = new RayCastResult();
+        IntersectionDetector.RaycastAABB(element, ray, result);
+
+        if (result.hit) {
+          collisionPoints.push(result.point);
+        }
+      } else if (element instanceof Box2D) {
+        let result: RayCastResult = new RayCastResult();
+        IntersectionDetector.RaycastBox2D(element, ray, result);
+        if (result.hit) {
+          collisionPoints.push(result.point);
         }
       }
     }
 
-    // if the ray is going down
-    if (direction.y < 0) {
-      // if the ray is going right
-      if (direction.x > 0) {
-        // if the ray hits the bottom first
-        if (slope * width + y_intercept > 0) {
-          x = width;
-          y = slope * width + y_intercept;
-        } else {
-          x = -y_intercept / slope;
-          y = 0;
-        }
-      } else {
-        // if the ray hits the bottom first
-        if (slope * 0 + y_intercept > 0) {
-          x = 0;
-          y = slope * 0 + y_intercept;
-        } else {
-          x = -y_intercept / slope;
-          y = 0;
-        }
+    // find the closest point
+    let closestPoint = ray.origin;
+    let minDistance = Infinity;
+
+    for (let i = 0; i < collisionPoints.length; i++) {
+      let point = collisionPoints[i];
+      let distance = Vector.distance(ray.origin, point);
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestPoint = point;
       }
     }
 
-    // draw the line
+    // draw the ray until the closest point, if there is no closest point, draw it until the end of the canvas
+
     let path = new Path2D();
-    path.moveTo(position.x, position.y);
-    path.lineTo(x, y);
+    path.moveTo(ray.origin.x, ray.origin.y);
+    // path.lineTo(closestPoint.x, closestPoint.y);
+
+    if (closestPoint.x === ray.origin.x && closestPoint.y === ray.origin.y) {
+      // draw the ray until the end of the canvas
+      let end = new Vector(
+        ray.origin.x + ray.direction.x * 1000,
+        ray.origin.y + ray.direction.y * 1000
+      );
+      path.lineTo(end.x, end.y);
+    } else {
+      path.lineTo(closestPoint.x, closestPoint.y);
+    }
 
     this.ctx!.strokeStyle = ray.style.color;
     this.ctx!.lineWidth = ray.style.stroke_width;
 
     this.ctx!.stroke(path);
 
-    // draw the arrow
-    let arrow = new Path2D();
-    arrow.moveTo(x, y);
-    arrow.lineTo(x - 10, y - 10);
-    arrow.lineTo(x - 10, y + 10);
-    arrow.lineTo(x, y);
-
-    this.ctx!.fillStyle = ray.style.color;
-    this.ctx!.fill(arrow);
-
-    this.ctx!.lineWidth = ray.style.stroke_width;
-    this.ctx!.strokeStyle = ray.style.stroke_color;
-    this.ctx!.stroke(arrow);
+    // draw the intersection point
+    let intersectionPath = new Path2D();
+    intersectionPath.arc(closestPoint.x, closestPoint.y, 1, 0, 2 * Math.PI);
   }
 
   _displayRegularPolygon(rp: regularPolygon) {
